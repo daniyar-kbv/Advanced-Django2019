@@ -43,5 +43,5 @@ class ReviewListCreate(generics.ListCreateAPIView):
             return Response(status.HTTP_404_NOT_FOUND)
 
         return serializer.save(reviewer=self.request.user,
-                               company=company,
+                               company_id=company,
                                ip_address=self.request.META['REMOTE_ADDR'])
