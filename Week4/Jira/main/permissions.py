@@ -41,7 +41,7 @@ class TaskPermission(BasePermission):
 
 
 class TaskInsidePermission(BasePermission):
-    message = 'You must be the owner of the project or task.'
+    message = 'You must be the owner of the project or task or comment/document.'
 
     def has_permission(self, request, view):
         return request.user.is_authenticated
@@ -52,4 +52,4 @@ class TaskInsidePermission(BasePermission):
         if view.action is 'list':
             return True
         if view.action is not 'list':
-            return request.user in [obj.task.creator, obj.task.block.project.creator]
+            return request.user in [obj.task.creator, obj.task.block.project.creator, obj.creator]

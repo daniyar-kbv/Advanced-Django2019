@@ -24,6 +24,7 @@ class BlockSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    # creator =
     class Meta:
         model = Task
         fields = '__all__'

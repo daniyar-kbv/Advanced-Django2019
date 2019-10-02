@@ -17,9 +17,24 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
-class ProjectDoneManager(models.Manager):
+class ProjectManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(status=PROJECT_DONE)
+        return super().get_queryset().filter(project_type=PROJECT_OPTIMIZATION)
+
+    def optimization_projects(self):
+        return self.filter(project_type=PROJECT_OPTIMIZATION)
+
+    def development_projects(self):
+        return self.filter(project_type=PROJECT_DEVELOPMENT)
+
+    def filter_by_project_type(self, project_type):
+        return self.filter(project_type=project_type)
+
+    def frozen_projects(self):
+        return self.filter(status=PROJECT_FROZEN)
+
+    def in_process_projects(self):
+        return self.filter(status=PROJECT_IN_PROCESS)
 
     def done_projects(self):
         return self.filter(status=PROJECT_DONE)
@@ -28,56 +43,13 @@ class ProjectDoneManager(models.Manager):
         return self.filter(status=status)
 
 
-class ProjectInProcessManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(status=PROJECT_IN_PROCESS)
-
-    def in_process_projects(self):
-        return self.filter(status=PROJECT_IN_PROCESS)
-
-    def filter_by_status(self, status):
-        return self.filter(status=status)
-
-
-class ProjectFrozenManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(status=PROJECT_FROZEN)
-
-    def frozen_projects(self):
-        return self.filter(status=PROJECT_FROZEN)
-
-    def filter_by_status(self, status):
-        return self.filter(status=status)
-
-
-class ProjectDevelopmentManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(project_type=PROJECT_DEVELOPMENT)
-
-    def development_projects(self):
-        return self.filter(project_type=PROJECT_DEVELOPMENT)
-
-    def filter_by_project_type(self, project_type):
-        return self.filter(project_type=project_type)
-
-
-class ProjectOptimizationManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(project_type=PROJECT_OPTIMIZATION)
-
-    def optimization_projects(self):
-        return self.filter(project_type=PROJECT_OPTIMIZATION)
-
-    def filter_by_project_type(self, project_type):
-        return self.filter(project_type=project_type)
-
-
 class Project(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     description = models.CharField(max_length=250, blank=False, null=False)
     status = models.PositiveSmallIntegerField(choices=PROJECT_STATUSES, default=PROJECT_IN_PROCESS)
     project_type = models.PositiveSmallIntegerField(choices=PROJECT_TYPES, default=PROJECT_DEVELOPMENT)
     creator = models.ForeignKey(MainUser, on_delete=models.CASCADE)
+    objects = ProjectManager
 
     def __str__(self):
         return self.name
@@ -117,6 +89,6 @@ class TaskDocument(models.Model):
 
 class TaskComment(models.Model):
     body = models.CharField(max_length=300, blank=False, null=False)
-    created_at = models.CharField(max_length=100, default=dt.datetime.now())
+    created_at = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(MainUser, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)

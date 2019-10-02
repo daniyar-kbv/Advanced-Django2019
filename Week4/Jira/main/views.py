@@ -36,14 +36,19 @@ class ProjectViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     http_method_names = ['get', 'post']
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    # serializer_class = ProjectSerializer
     permission_classes = (IsAuthenticated,)
 
-    def retrieve(self, request, pk=None):
-        queryset = Project.objects.all()
-        project = get_object_or_404(queryset, pk=pk)
-        serializer = ProjectDetailedSerializer(project)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ProjectDetailedSerializer
+        return ProjectSerializer
+
+    # def retrieve(self, request, pk=None):
+    #     queryset = Project.objects.all()
+    #     project = get_object_or_404(queryset, pk=pk)
+    #     serializer = ProjectDetailedSerializer(project)
+    #     return Response(serializer.data)
 
     @action(methods=['GET'], detail=True)
     def tasks(self, request, pk):
@@ -180,12 +185,7 @@ class TaskCommentViewSet(mixins.ListModelMixin,
         return serializer.save(creator=self.request.user)
 
 
-class TaskDocumentViewSet(mixins.ListModelMixin,
-                    mixins.CreateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.DestroyModelMixin,
-                    viewsets.GenericViewSet):
+class TaskDocumentViewSet(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     queryset = TaskDocument.objects.all()
     serializer_class = TaskDocumentSerializer
