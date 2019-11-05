@@ -3,6 +3,9 @@ from authe.models import MainUser
 from main.constants import PROJECT_STATUSES, PROJECT_IN_PROCESS, PROJECT_TYPES, PROJECT_DEVELOPMENT, PROJECT_DONE, \
     PROJECT_FROZEN, PROJECT_OPTIMIZATION
 from django.db import models
+from utils.upload import task_document_path
+from utils.validators import validate_extension, validate_file_size
+
 import datetime as dt
 
 
@@ -82,7 +85,7 @@ class Task(models.Model):
 
 
 class TaskDocument(models.Model):
-    document = models.CharField(max_length=200, blank=False, null=False)
+    document = models.FileField(upload_to=task_document_path, validators=[validate_file_size, validate_extension])
     creator = models.ForeignKey(MainUser, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
