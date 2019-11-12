@@ -1,0 +1,4 @@
+ERROR 2019-11-06 10:48:46,865 User creation failed: {'username': [ErrorDetail(string='A user with that username already exists.', code='unique')]}
+ERROR 2019-11-06 10:49:51,372 User creation failed: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+ERROR 2019-11-06 10:51:20,708 User creation failed: {'required': 'This field is required.', 'null': 'This field may not be null.', 'invalid': 'Invalid data. Expected a dictionary, but got {datatype}.'}
+INFO 2019-11-06 10:52:03,365 User test4 is created
