@@ -14,8 +14,8 @@ def document_path(instance, filename):
   return f'{instance._meta.verbose_name_plural}/{folder_name(instance)}/{filename}'
 
 
-def task_document_path(instance, filename):
-  return f'tasks/{instance.task.id}:{instance.task.name.replace(" ", "_")}/{filename}'
+# def task_document_path(instance, filename):
+#   return f'tasks/{instance.task.id}:{instance.task.name.replace(" ", "_")}/{filename}'
 
 
 def avatar_path(instance, filename):

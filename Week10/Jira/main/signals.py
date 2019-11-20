@@ -5,7 +5,7 @@ from main.models import Task, TaskDocument
 from utils.upload import task_delete_documents
 
 
-@receiver(post_delete, sender=Task)
+@receiver(post_delete, sender=TaskDocument)
 def task_deleted(sender, instance, **kwargs):
     if instance:
         task_delete_documents(task=instance)
